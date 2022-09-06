@@ -1,6 +1,6 @@
 # Flutter_NewsApi
 
-A new Flutter project.
+Flutter news api usage.
 
 ## Getting Started
 
