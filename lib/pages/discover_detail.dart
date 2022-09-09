@@ -9,20 +9,18 @@ import '../service/service.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'detail.dart';
-import 'setting.dart';
 
 var test = [];
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class DiscoverDetailPage extends StatefulWidget {
+  const DiscoverDetailPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<DiscoverDetailPage> createState() => _DiscoverDetailPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late Future<List<Article>?> futureAlbum;
-  late Future<List<Article>?> futureCarousel;
+class _DiscoverDetailPageState extends State<DiscoverDetailPage> {
+  late Future<List<Article>?> futureCategory;
 
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
@@ -32,11 +30,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
-    futureCarousel = fetchCarousel();
+    futureCategory = fetchCategory();
   }
 
   bool isListView = true;
+  var datas = Get.arguments;
 
   DateTime _selectedDate = DateTime.now();
   // DateTime _selectedDate = DateTime.now().subtract(const Duration(days: 1));
@@ -75,10 +73,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: IconButton(
                                 onPressed: () {
-                                  _globalKey.currentState!.openDrawer();
+                                  Get.back();
                                 },
-                                icon: Icon(Icons.menu,
+                                icon: Icon(Icons.arrow_back,
                                     color: ColorTheme().iconColor))),
+                                    Text(datas[0],
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    color: ColorTheme().textColor)),
                         Container(
                           decoration: BoxDecoration(
                             color: ColorTheme().buttonColor,
@@ -116,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               width: width,
               height: height / 3.5,
               child: FutureBuilder<List<Article>?>(
-                future: futureCarousel,
+                future: futureCategory,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return const Center(child: CircularProgressIndicator());
@@ -234,7 +236,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.only(top: 18.0),
               child: FutureBuilder<List<Article>?>(
-                future: futureAlbum,
+                future: futureCategory,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return isListView
@@ -384,9 +386,14 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                       )),
                                                 )
-                                              : const CircularProgressIndicator(
-                                                  color: Colors.red,
-                                                ),
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(3.0),
+                                                  child: Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      child: Lottie.asset('assets/images/404.json'),
+                                                ))
                                         ],
                                       ),
                                     ),
@@ -517,9 +524,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     IconButton(
-                        onPressed: () {
-                          // Get.to(SettingPage());
-                        },
+                        onPressed: () {},
                         icon:
                             Icon(Icons.settings, color: ColorTheme().iconColor))
                   ],
